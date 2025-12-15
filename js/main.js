@@ -31,28 +31,33 @@ class EvilCircle extends Shape {
   constructor(x, y) {
     super(x, y, 30, 30);
     this.color = 'rgba(255, 255, 255, 1)';
-    this.size = 10;
-    this.length = 20;
+    this.size = 15;
+    this.length = 5;
     this.moveX = 0;
     this.moveY = 0;
+    this.tail = [{x: this.x, y: this.y}];
 
     window.addEventListener("keydown", (e) => {
       switch (e.key) {
         case "a":
           this.x -= this.velX;
           this.moveX = -5;
+          this.moveY = 0;
           break;
         case "d":
           this.x += this.velX;
           this.moveX = 5;
+          this.moveY = 0;
           break;
         case "w":
           this.y -= this.velY;
           this.moveY = -5;
+          this.moveX = 0;
           break;
         case "s":
           this.y += this.velY;
           this.moveY = 5;
+          this.moveX = 0;
           break;
       }
     });
@@ -64,28 +69,37 @@ class EvilCircle extends Shape {
   }
 
   draw() {
-    ctx.beginPath();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = this.color;
-    ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-    ctx.stroke();
+    this.tail.push({x: this.x, y: this.y});
+
+    if (this.tail.length > this.length) {
+        this.tail.shift();
+    }
+
+    for (let i = 0; i < this.tail.length; i++) {
+      const part = this.tail[i];
+
+      ctx.beginPath();
+      ctx.fillStyle = this.color;
+      ctx.arc(part.x, part.y, this.size, 0, 2 * Math.PI);
+      ctx.fill();
+    }
   }
 
   checkBounds() {
     if (this.x + this.size >= width) {
-      this.x = -Math.abs(this.size);
+      this.x = width - this.size;
     }
 
     if (this.x - this.size <= 0) {
-      this.x = Math.abs(this.size);
+      this.x = this.size;
     }
 
     if (this.y + this.size >= height) {
-      this.y = -Math.abs(this.size);
+      this.y = height - this.size;
     }
 
     if (this.y - this.size <= 0) {
-      this.y = Math.abs(this.size);
+      this.y = this.size;
     }
   }
 
@@ -100,6 +114,7 @@ class EvilCircle extends Shape {
           ball.exists = false;
           ballCount--;
           ballCountDisplay.textContent = `ball count: ${ballCount}`;
+          this.length += 5;
         }
       }
     }
