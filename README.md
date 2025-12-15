@@ -42,6 +42,9 @@
     which name belongs to the current player, so players can only delete their own scores from
     the leaderboard, but I’m not quite sure how I’d go about accomplishing that.
 
+## Sources
+  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+  - https://www.w3schools.com/Js/js_array_methods.asp
 
 ## Project Wireframe
 
